@@ -1,6 +1,8 @@
 import tensorflow as tf
 import os
 import cv2
+import pathlib
+import collections
 
 def validate_files(directory : str):
     """
@@ -17,18 +19,25 @@ def validate_files(directory : str):
             except Exception as e:
                 print('Issue with image ' + img_path)
                 os.remove(img_path)
-
-def process_data(directory : str, train_percent : int=70, validation_percent : int=20, test_percent : int=10) -> tuple[tf.data.Dataset, tf.data.Dataset, tf.data.Dataset]: 
+                
+def get_class_distribution(directory: str) -> dict:
+    """Returns a dict of {class_name: count} for each subfolder."""
+    data_dir = pathlib.Path(directory)
+    return {
+        folder.name: len(list(folder.rglob("*.*")))
+        for folder in sorted(data_dir.iterdir())
+        if folder.is_dir()
+    }
+    
+def process_data(directory : str, train_percent : int=70, validation_percent : int=20, batch_size:int = 32) -> tuple[tf.data.Dataset, tf.data.Dataset, tf.data.Dataset]: 
     """
     Processes image data from a directory and splits it into training, validation and test sets.
     """
     
-    data = tf.keras.utils.image_dataset_from_directory(directory)   # loading the data  
+    data = tf.keras.utils.image_dataset_from_directory(directory, batch_size=None, image_size=(256, 256))   # loading the data  
     
     data = data.map(lambda x,y: (x/255, y))                         # rescaling to values betweeen 1 and 0
-    data_iterator = data.as_numpy_iterator()                        #iterates through the data
-    batch = next(data_iterator)
-    
+        
     '''
     0 - not_allowed
     1 - paper
@@ -37,21 +46,39 @@ def process_data(directory : str, train_percent : int=70, validation_percent : i
     '''
     
     # Splitting the data
-    train_size = int(len(data) * train_percent * .01)
-    val_size = int(len(data) * validation_percent * .01) + 1
-    test_size = int(len(data) * test_percent* .01) + 1
+    total_samples = len(data)
+    train_size = int(total_samples * train_percent * 0.01)
+    val_size = int(total_samples * validation_percent * 0.01)
+    test_size = total_samples - train_size - val_size
 
-    train = data.take(train_size)
-    val = data.skip(train_size).take(val_size)
-    test = data.skip(train_size + val_size).take(test_size)
+    train = data.take(train_size).batch(batch_size).prefetch(1)
+    val = data.skip(train_size).take(val_size).batch(batch_size).prefetch(1)
+    test = data.skip(train_size + val_size).take(test_size).batch(batch_size).prefetch(1)
     
     return train, val, test
 
+def print_distribution(class_counts: dict):
+    """Prints class distribution and imbalance ratio."""
+    total = sum(class_counts.values())
+    print(f"\n{'Class':<20} {'Count':>6} {'%':>7}")
+    print("-" * 35)
+    for cls, count in sorted(class_counts.items()):
+        print(f"{cls:<20} {count:>6} {count/total*100:>6.1f}%")
+    max_count = max(class_counts.values())
+    min_count = min(class_counts.values())
+    print(f"\nTotal images: {total}")
+    print(f"Imbalance ratio: {max_count/min_count:.2f}x")
+    
 def main():
     root_dir = 'training_data'
         
     validate_files(root_dir)   
-    process_data(root_dir)
+    class_counts = get_class_distribution(root_dir)
+    print_distribution(class_counts)
+
+    train, val, test = process_data(root_dir)
+    
+    
     
 if __name__ == "__main__":
     main()

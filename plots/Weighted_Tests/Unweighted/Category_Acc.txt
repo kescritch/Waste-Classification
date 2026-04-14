@@ -1,0 +1,10 @@
+              precision    recall  f1-score   support
+
+ not_allowed       0.90      0.76      0.82       625
+       paper       0.77      0.80      0.78      1500
+     plastic       0.79      0.59      0.68      1241
+       trash       0.80      0.88      0.84      3024
+
+    accuracy                           0.80      6390
+   macro avg       0.81      0.76      0.78      6390
+weighted avg       0.80      0.80      0.79      6390
