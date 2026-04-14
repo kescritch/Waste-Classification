@@ -6,8 +6,17 @@
 Custom CNN architecture trained on 11,000 images that categorizes waste into 4 waste categories.
 Currently experimenting with transfer learning with a goal accuracy of 95%.
 
-# Results:
+# Instructions: 
+- Create virtual environment.
+- Download requirements using pip install -r requirements.txt.
 
+# Structure: 
+- main.py: Main file for initialization.
+- cnn_V1.py: Creates the ground up CNN model and returns training history. Prints summary of model when run.
+- cnn_v2.py: Creates a CNN that uses transfer learning and returns training history. Prints a summary of model when run.
+- load.py: Seperates Images into training, validation, and testing batches. Prints distribution of data when run. 
+  
+  # Results:
 | Class       | Precision | Recall | F1-Score | Support |
 |-------------|-----------|--------|----------|---------|
 | not_allowed | 0.90      | 0.76   | 0.82     | 625     |
@@ -16,15 +25,8 @@ Currently experimenting with transfer learning with a goal accuracy of 95%.
 | trash       | 0.80      | 0.88   | 0.84     | 3024    |
 | **Overall** | **0.81**  |        |          | **6390**|
 
-# Instructions: 
-- Create virtual environment.
-- Download requirements using pip install -r requirements.txt.
+- charts from testing are included in plots
 
-# Structure: 
-- main.py: Main file for initialization.
-- cnn.py: Creates the CNN model and returns training history. Prints string summary of model when ran.
-- load.py: Seperates Images into training, validation, and testing batches. Prints distribution of data when run. 
-  
 # Stack:
 - Python, TensorFlow, Keras, OpenCV, Matplotlib
 
