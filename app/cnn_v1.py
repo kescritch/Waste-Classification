@@ -9,39 +9,51 @@ from sklearn.metrics import classification_report
 import os
 
 class Model:
+    """
+    CNN model builder and trainer for waste classification.
+    Supports configurable convolutional blocks, batch norm, and dropout.
+    """
     def __init__(self,epochs:int = 20):
         self.epochs = epochs
         
 
-    def block(self,model:int, mult:int, first_block:bool, batch_norm:bool, conv_layers:int): #testing how different variables effect overfitting
+    def block(self,model:int, mult:int, batch_norm:bool, conv_layers:int): 
+        '''
+            Convolutional block model. 
+            Each block has 1 or 2 convolutional layers, followed by optional batch normalization, relu activation, and max pooling. 
+            The number of filters doubles with each block.
+        '''
         filters = 32 * (2 ** mult) #doubles the number of filters with each block
         print(f"Filter size: {filters}")
 
-        if(first_block):
-            model.add(Conv2D(filters, (3,3), 1, padding = 'same')) #convolution with 32 filters with the size of 3 pixels by 3 pixels. Stride of 1
-            if conv_layers == 2:
-                model.add(Conv2D(filters, (3,3), 1, padding = 'same'))
-        else: 
-            model.add(Conv2D(filters, (3,3), 1, padding = 'same'))
-            if conv_layers == 2:
-                model.add(Conv2D(filters, (3,3), 1, padding = 'same'))
-        if batch_norm:
+        model.add(Conv2D(filters, (3,3), 1, padding = 'same')) #convolution with 32 filters with the size of 3 pixels by 3 pixels. Stride of 1
+        if conv_layers == 2:
+            model.add(Conv2D(filters, (3,3), 1, padding = 'same')) #adding 2nd conv layer if specified
+
+        if batch_norm:  
             model.add(BatchNormalization())
 
-        model.add(Activation('relu')) 
-        model.add(MaxPooling2D(pool_size = (2,2), strides=2)) #gets the maximum value from the relu, reduces the image data
+        model.add(Activation('relu')) #activation function
+        model.add(MaxPooling2D(pool_size = (2,2), strides=2))
 
     def build_model(self,blocks:int, conv_layers:int, batch_norm:bool, dropout:bool) -> Sequential:
-        
+        '''
+            Builds the model.
+            blocks: number of convolutional blocks
+            conv_layers: number of convolutional layers in each block (1 or 2)
+            batch_norm: whether to use batch normalization
+            dropout: whether to use dropout in the fully connected layers
+        '''
+
         model = Sequential()
         model.add(tf.keras.Input(shape=(256, 256, 3)))
         
         for i in range(blocks): #adding blocks 
-            self.block(model, i, i==0, batch_norm, conv_layers)
+            self.block(model, i, batch_norm, conv_layers)
 
         #fully connected layers
         model.add(GlobalAveragePooling2D()) #flattens the channel value from the last block into one
-        if dropout:
+        if dropout: 
             model.add(Dropout(.2))
         model.add(Dense(256, activation='relu', kernel_regularizer=regularizers.l2(1e-4)))
         if dropout:
@@ -53,6 +65,10 @@ class Model:
         return model
 
     def train_model(self,model:Sequential, val:tf.data.Dataset, train:tf.data.Dataset, test:tf.data.Dataset):
+        '''
+            Trains the model and prints classification report on test data.
+            Has a learning rate scheduler that reduces learning rate by half if val_loss does not improve for 3 epochs.
+        '''
         # Reduce learning rate when val_loss stops improving
         reduce_lr = ReduceLROnPlateau(
             monitor='val_loss',   # which metric to monitor

@@ -1,8 +1,7 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
-import cnn, load
+import cnn_v1, cnn_v2, load
 from datetime import datetime
-import numpy as np
 
 def plot(hist:tf.keras.callbacks.History, label:str):
     fig, axs = plt.subplots(1, 2, figsize=(10, 4))
@@ -24,6 +23,7 @@ def plot(hist:tf.keras.callbacks.History, label:str):
     axs[1].set_ylabel("Accuracy")
     axs[1].set_xlabel("Epochs")
 
+    #printing other data
     max_acc = max(hist.history['accuracy'])
     max_val_acc = max(hist.history['val_accuracy'])
     min_val_loss = min(hist.history['val_loss'])
@@ -45,6 +45,7 @@ ROOT_DIR = 'training_data'
 BATCH_SIZE = 32
 NUM_EPOCH = 40
 
+'''Used when testing ground up model. Not used for final model.'''
 CONV_BLOCKS = 4
 CONV_LAYERS = 1
 NUM_DENSE = 2
@@ -60,12 +61,23 @@ def main():
     load.validate_files(ROOT_DIR)
     val, train, test = load.process_data(ROOT_DIR, BATCH_SIZE)
 
-    label = f"""Blocks: {CONV_BLOCKS}\nConv Layers/Block {CONV_LAYERS}\nBatch Normalization: {BATCH_NORM}"""
+    '''Uncomment to test custom CNN. Comment out for transfer learning model.'''
+    # label = f"""Blocks: {CONV_BLOCKS}\nConv Layers/Block {CONV_LAYERS}\nBatch Normalization: {BATCH_NORM}"""
+    # print(label)
+
+    # model = cnn_v1.Model(NUM_EPOCH) 
+    # built_model = model.build_model(CONV_BLOCKS, CONV_LAYERS, BATCH_NORM, DROPOUT)
+    # hist = model.train_model(built_model, val, train, test) 
+    # plot(hist,label)   
+
+    '''Transfer learning model'''
+    label = f"""Transfer Learning Model - MobileNetV2"""
     print(label)
-    model = cnn.Model(NUM_EPOCH) 
-    built_model = model.build_model(CONV_BLOCKS, CONV_LAYERS, BATCH_NORM, DROPOUT)
+
+    model = cnn_v2.Model(NUM_EPOCH) 
+    built_model = model.build_model()
     hist = model.train_model(built_model, val, train, test) 
-    plot(hist,label)    
-    
+    plot(hist,label)   
+
 if __name__ == '__main__':
     main()
