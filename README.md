@@ -8,7 +8,7 @@ A computer computer vision application that uses a CNN to classify waste.
 - 85% validation score across 11,000 images
 
 ## Tech Stack
--Python, TensorFlow, Keras, OpenCV, NumPy
+- Python, TensorFlow, Keras, OpenCV, NumPy
 
 ## Datasets
 - https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2?select=standardized_256
