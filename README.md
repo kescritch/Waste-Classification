@@ -26,7 +26,7 @@ Currently experimenting with transfer learning with a goal accuracy of 95%.
 - load.py: Seperates Images into training, validation, and testing batches. Prints distribution of data when run. 
   
 # Stack:
-- Python, TensorFlow, Keras, OpenCV, NumPy
+- Python, TensorFlow, Keras, OpenCV, Matplotlib
 
 ## Datasets
 - https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2?select=standardized_256
