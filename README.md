@@ -1,6 +1,7 @@
 # Waste-Classification
 
 **This project is actively in development**
+
 Custom CNN architecture trained on 11,000 images 
 across 4 waste categories achieving 85% validation accuracy. 
 
