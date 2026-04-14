@@ -1,10 +1,14 @@
 # Waste-Classification
+A computer computer vision application that uses a CNN to classify waste. 
 
+**This project is actively in development**
 
+## Current Progress
+- CNN model built from scratch using TensorFlow and Keras
+- 85% validation score across 11,000 images
 
-## Dataset
+## Tech Stack
+-Python, TensorFlow, Keras, OpenCV, NumPy
 
-This project uses the "Garbage Dataset" from Kaggle:
-
-    - https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2?select=standardized_256
-    - Contains 10 classes of waste: Metal, Glass, Biological, Paper, Batteries, Cardboard, Shoes (not used), Clothes, and Plastic. 
+## Datasets
+- https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2?select=standardized_256
