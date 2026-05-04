@@ -23,7 +23,7 @@ def plot(hist:tf.keras.callbacks.History, label:str):
     axs[1].set_ylabel("Accuracy")
     axs[1].set_xlabel("Epochs")
 
-    #printing other data
+    #printing other
     max_acc = max(hist.history['accuracy'])
     max_val_acc = max(hist.history['val_accuracy'])
     min_val_loss = min(hist.history['val_loss'])
@@ -43,7 +43,7 @@ def plot(hist:tf.keras.callbacks.History, label:str):
 
 ROOT_DIR = 'training_data'
 BATCH_SIZE = 32
-NUM_EPOCH = 40
+NUM_EPOCH = 20
 
 '''Used when testing ground up model. Not used for final model.'''
 CONV_BLOCKS = 4
@@ -78,6 +78,7 @@ def main():
     built_model = model.build_model()
     hist = model.train_model(built_model, val, train, test) 
     plot(hist,label)   
+    
 
 if __name__ == '__main__':
     main()

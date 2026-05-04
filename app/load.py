@@ -34,7 +34,7 @@ def process_data(directory : str, train_percent : int=70, validation_percent : i
     Processes image data from a directory and splits it into training, validation and test sets.
     """
     
-    data = tf.keras.utils.image_dataset_from_directory(directory, batch_size=None, image_size=(256, 256))   # loading the data  
+    data = tf.keras.utils.image_dataset_from_directory(directory, batch_size=None, image_size=(254, 254))   # loading the data  
     
     data = data.map(lambda x,y: (x/255, y))                         # rescaling to values betweeen 1 and 0
         

@@ -74,7 +74,7 @@ class Model:
             monitor='val_loss',   # which metric to monitor
             factor=0.5,           # reduce LR by this factor
             patience=3,           # wait this many epochs without improvement
-            min_lr=1e-6,          # don't go below this LR
+            min_lr=1e-6,          # minimum rate
             verbose=1
         )
 
