@@ -1,15 +1,16 @@
 import cv2
 import tensorflow as tf
 from tensorflow import keras
-from keras import Sequential
+from keras import Sequential, regularizers
 from keras.layers import Dense, GlobalAveragePooling2D
 from keras.optimizers import Adam
 from keras.metrics import Precision, Recall
+from keras.layers import Conv2D, MaxPooling2D, Activation, Dropout, BatchNormalization
 from sklearn.metrics import classification_report
 import numpy as np
 import os
 
-from model.config import LOGS_DIR, TEST_DIR
+from model.config import LOGS_DIR, TEST_DIR, CLASS_NAMES
 
 class Model:
     """
