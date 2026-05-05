@@ -1,63 +1,77 @@
-from xml.parsers.expat import model
 import cv2
-from matplotlib.pylab import test
 import tensorflow as tf
 from tensorflow import keras
 from keras import Sequential
-from keras.layers import Dense, GlobalAveragePooling2D, Dropout
+from keras.layers import Dense, GlobalAveragePooling2D
 from keras.optimizers import Adam
-from keras.metrics import Precision, Recall, BinaryAccuracy
+from keras.metrics import Precision, Recall
 from sklearn.metrics import classification_report
 import numpy as np
 import os
 
+from model.config import LOGS_DIR, TEST_DIR
+
 class Model:
-    '''
-    CNN model builder and trainer for waste classification using transfer learning with MobileNetV2.
-    '''
+    """
+    CNN model builder and trainer for waste classification.
+    Supports configurable convolutional blocks, batch norm, and dropout.
+    """
     def __init__(self,epochs:int = 20):
         self.epochs = epochs
-        self.class_names = [
-            'not_allowed',
-            'paper',
-            'plastic',
-            'trash'
-        ]
+        self.class_names = CLASS_NAMES
+        
 
-    def build_model(self) -> Sequential:
+    def block(self,model:int, mult:int, batch_norm:bool, conv_layers:int): 
         '''
-            Builds the model using MobileNetV2 as a base and adds fully connected layers on top.
+            Convolutional block model. 
+            Each block has 1 or 2 convolutional layers, followed by optional batch normalization, relu activation, and max pooling. 
+            The number of filters doubles with each block.
+        '''
+        filters = 32 * (2 ** mult) #doubles the number of filters with each block
+
+        model.add(Conv2D(filters, (3,3), 1, padding = 'same')) #convolution with 32 filters with the size of 3 pixels by 3 pixels. Stride of 1
+        if conv_layers == 2:
+            model.add(Conv2D(filters, (3,3), 1, padding = 'same')) #adding 2nd conv layer if specified
+
+        if batch_norm:  
+            model.add(BatchNormalization())
+
+        model.add(Activation('relu')) #activation function
+        model.add(MaxPooling2D(pool_size = (2,2), strides=2))
+
+    def build_model(self,blocks:int, conv_layers:int, batch_norm:bool, dropout:bool) -> Sequential:
+        '''
+            Builds the model.
+            blocks: number of convolutional blocks
+            conv_layers: number of convolutional layers in each block (1 or 2)
+            batch_norm: whether to use batch normalization
+            dropout: whether to use dropout in the fully connected layers
         '''
 
-        image_shape = (256, 256, 3)
-        base_model = tf.keras.applications.MobileNetV2(
-            weights='imagenet',  # Load pre-trained ImageNet weights
-            include_top=False,   # Exclude the top classification layer
-        )
-
-        base_model.trainable = False # Freeze the base model
-
-        model = Sequential([])
-        model.add(tf.keras.Input(image_shape))
-        model.add(base_model) # Add the base model as a feature extractor
+        model = Sequential()
+        model.add(tf.keras.Input(shape=(256, 256, 3)))
+        
+        for i in range(blocks): #adding blocks 
+            self.block(model, i, batch_norm, conv_layers)
 
         #fully connected layers
         model.add(GlobalAveragePooling2D()) #flattens the channel value from the last block into one
-
-        model.add(Dense(128, activation = 'relu')) 
-
+        if dropout: 
+            model.add(Dropout(.2))
+        model.add(Dense(256, activation='relu', kernel_regularizer=regularizers.l2(1e-4)))
+        if dropout:
+            model.add(Dropout(.2))
         model.add(Dense(4, activation = 'softmax')) 
 
         model.compile(Adam(learning_rate=1e-3), loss = tf.losses.SparseCategoricalCrossentropy(), metrics = ['accuracy'])
         
         return model
 
-
     def train_model(self, model: Sequential, val: tf.data.Dataset, train: tf.data.Dataset, test: tf.data.Dataset):
         '''
         Trains the model and prints classification report on test data
         '''
-        logdir = 'logs'
+        logdir = LOGS_DIR
         callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
         
         # Train the model
@@ -97,9 +111,9 @@ class Model:
         
         # Test on individual images
         print("\n=== Individual Image Predictions ===")
-        if os.path.exists('test_images'):
-            for filename in os.listdir('test_images'):
-                img_path = os.path.join('test_images', filename)
+        if os.path.exists(TEST_DIR):
+            for filename in os.listdir(TEST_DIR):
+                img_path = os.path.join(TEST_DIR, filename)
                 if not os.path.isfile(img_path):
                     continue
                 
@@ -128,7 +142,7 @@ class Model:
 
 def main(): 
     model = Model(10)
-    results = model.build_model()
+    results = model.build_model(4,1,True,False)
     results.summary()
 
     

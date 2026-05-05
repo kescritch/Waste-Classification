@@ -1,7 +1,10 @@
+from datetime import datetime
+import os
 import tensorflow as tf
 import matplotlib.pyplot as plt
-import cnn_v1, cnn_v2, load
-from datetime import datetime
+
+from model.config import PLOTS_DIR
+
 
 def plot(hist:tf.keras.callbacks.History, label:str):
     fig, axs = plt.subplots(1, 2, figsize=(10, 4))
@@ -39,46 +42,6 @@ def plot(hist:tf.keras.callbacks.History, label:str):
     date_str = datetime.now().strftime("%Y-%m-%d")
     time_str = datetime.now().strftime("%H-%M-%S")
     name = f"loss_plot_and_accuracy_plot_{date_str}_{time_str}.png"
-    plt.savefig(name, bbox_inches='tight')
+    plt.savefig(os.path.join(PLOTS_DIR, name), bbox_inches='tight')
 
-ROOT_DIR = 'training_data'
-BATCH_SIZE = 32
-NUM_EPOCH = 20
 
-'''Used when testing ground up model. Not used for final model.'''
-CONV_BLOCKS = 4
-CONV_LAYERS = 1
-NUM_DENSE = 2
-BATCH_NORM = True
-DROPOUT = False
-
-def main():
-    
-    gpus = tf.config.experimental.list_physical_devices('GPU') #listing GPUs
-    for gpu in gpus:
-        tf.config.experimental.set_memory_growth(gpu,True) #limiting GPU memory growth
-        
-    load.validate_files(ROOT_DIR)
-    val, train, test = load.process_data(ROOT_DIR, BATCH_SIZE)
-
-    '''Uncomment to test custom CNN. Comment out for transfer learning model.'''
-    # label = f"""Blocks: {CONV_BLOCKS}\nConv Layers/Block {CONV_LAYERS}\nBatch Normalization: {BATCH_NORM}"""
-    # print(label)
-
-    # model = cnn_v1.Model(NUM_EPOCH) 
-    # built_model = model.build_model(CONV_BLOCKS, CONV_LAYERS, BATCH_NORM, DROPOUT)
-    # hist = model.train_model(built_model, val, train, test) 
-    # plot(hist,label)   
-
-    '''Transfer learning model'''
-    label = f"""Transfer Learning Model - MobileNetV2"""
-    print(label)
-
-    model = cnn_v2.Model(NUM_EPOCH) 
-    built_model = model.build_model()
-    hist = model.train_model(built_model, val, train, test) 
-    plot(hist,label)   
-    
-
-if __name__ == '__main__':
-    main()

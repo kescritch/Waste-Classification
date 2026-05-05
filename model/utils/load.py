@@ -2,7 +2,6 @@ import tensorflow as tf
 import os
 import cv2
 import pathlib
-import collections
 
 def validate_files(directory : str):
     """
