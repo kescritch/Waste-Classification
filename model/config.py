@@ -20,6 +20,7 @@ CONV_BLOCKS = 4
 CONV_LAYERS = 1
 NUM_DENSE = 2
 BATCH_NORM = True
+DROPOUT = 0.5 #not implemented yet
 
 # Create directories if they don't exist
 # for directory in [OUTPUT_DIR, LOGS_DIR, PLOTS_DIR, MODELS_DIR]:

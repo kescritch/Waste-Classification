@@ -7,7 +7,7 @@ from model.utils import load, ploter
 from model.models import cnn_v1 , cnn_v2
 from model.config import *
 
-def build_model(model:str):
+def build_model(model_ver:str):
     """Main function to build, train, and evaluate the CNN model for waste classification.
 
         Use v1 to test my custom CNN model
@@ -21,14 +21,14 @@ def build_model(model:str):
     val, train, test = load.process_data(ROOT_DIR, BATCH_SIZE)
 
     '''Custom CNN model'''
-    if model == "v1":
+    if model_ver == "v1":
         label = f"""Blocks: {CONV_BLOCKS}\nConv Layers/Block {CONV_LAYERS}\nBatch Normalization: {BATCH_NORM}"""
         print(label)
 
         model = cnn_v1.Model(NUM_EPOCH) 
         built_model = model.build_model(CONV_BLOCKS, CONV_LAYERS, BATCH_NORM, DROPOUT)
 
-    elif model == "v2":
+    elif model_ver == "v2":
         '''Transfer learning model'''
         label = f"""Transfer Learning Model - MobileNetV2"""
         print(label)
@@ -43,12 +43,12 @@ def build_model(model:str):
     if not os.path.exists(MODELS_DIR):
         os.makedirs(MODELS_DIR)
         
-    built_model.save(os.path.join(MODELS_DIR, f'waste_classification_model-{model}.keras'))
+    built_model.save(os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.keras"))
     ploter.plot(hist,label)   
 
 def run_model(model_ver:str):
     
-    model = load_model(os.path.join(MODELS_DIR, f'waste_classification_model-{model_ver}.keras'))
+    model = load_model(os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.keras"))
     
         # Test on individual images
     print("\n=== Individual Image Predictions ===")
