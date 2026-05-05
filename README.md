@@ -3,11 +3,11 @@
 **This project is actively in development**
 
 # Overview:
-Custom CNN architecture trained on 11,000 images that categorizes waste into 4 waste categories.
-Currently experimenting with transfer learning with a goal accuracy of 95%.
+Implements a custom CNN architecture trained on 11,000 images that categorizes waste into 4 waste categories.
+Implements a CNN using the transfer learning model MobileNetV2.
 
 # Results:
-
+Custom CNN model
 | Class       | Precision | Recall | F1-Score | Support |
 |-------------|-----------|--------|----------|---------|
 | not_allowed | 0.90      | 0.76   | 0.82     | 625     |
@@ -21,9 +21,13 @@ Currently experimenting with transfer learning with a goal accuracy of 95%.
 - Download requirements using pip install -r requirements.txt.
 
 # Structure: 
-- main.py: Main file for initialization.
-- cnn.py: Creates the CNN model and returns training history. Prints string summary of model when ran.
-- load.py: Seperates Images into training, validation, and testing batches. Prints distribution of data when run. 
+- Model
+  - data - holds the testing and training images.
+  - models - contains both the custom and transfer learning model builders.
+  - output - stores the logs and built models.
+  - utils - stores the helper functions.
+  - config.py - contains the constants.
+  - main.py - entry point, builds tests and records data.
   
 # Stack:
 - Python, TensorFlow, Keras, OpenCV, Matplotlib
