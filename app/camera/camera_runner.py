@@ -29,7 +29,10 @@ def run_camera_with_model(model_ver: str):
 
         # Draw rectangle and label
         cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        label = f"{prediction} ({confidence:.2%})"
+        if prediction == "none":
+            label = ""
+        else:
+            label = f"{prediction} ({confidence:.2%})"
         cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
         print(dict(zip(CLASS_NAMES, yhat[0])))
