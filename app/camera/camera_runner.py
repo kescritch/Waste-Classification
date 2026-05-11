@@ -19,7 +19,7 @@ def run_camera_with_model(model_ver: str):
 
         # Crop and classify just the box region
         crop = image[y1:y2, x1:x2]
-        resized = cv2.resize(crop, (256, 256))
+        resized = cv2.resize(crop, (254, 254))
         normalized = resized / 255.0
         
         yhat = model.predict(np.expand_dims(normalized, axis=0), verbose=0)
@@ -32,7 +32,7 @@ def run_camera_with_model(model_ver: str):
         label = f"{prediction} ({confidence:.2%})"
         cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-
+        print(dict(zip(CLASS_NAMES, yhat[0])))
         cv2.imshow('Waste Classification', image)
         
         if cv2.waitKey(1) & 0xFF == ord('q'):

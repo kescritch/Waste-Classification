@@ -35,4 +35,4 @@ Custom CNN model
 ## Datasets
 - https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2?select=standardized_256
 - https://www.kaggle.com/datasets/jvnr1495/batteries
-- https://www.kaggle.com/datasets/adithyachalla/waste-classification?select=1-Cardboard
+
