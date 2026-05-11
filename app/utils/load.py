@@ -3,6 +3,8 @@ import os
 import cv2
 import pathlib
 
+from app.config import ROOT_DIR
+
 def validate_files(directory : str):
     """
         Checks if all of the images in the file path are valid. If not it delets them.
@@ -69,7 +71,7 @@ def print_distribution(class_counts: dict):
     print(f"Imbalance ratio: {max_count/min_count:.2f}x")
     
 def main():
-    root_dir = 'training_data'
+    root_dir = ROOT_DIR
         
     validate_files(root_dir)   
     class_counts = get_class_distribution(root_dir)

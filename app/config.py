@@ -15,7 +15,7 @@ BATCH_SIZE = 32
 NUM_EPOCH = 20
 
 # Model Params
-CLASS_NAMES = ['not_allowed', 'paper', 'plastic', 'trash', "none"]
+CLASS_NAMES = ["none", "not_allowed", "paper", "plastic", "trash"]
 CONV_BLOCKS = 4
 CONV_LAYERS = 1
 NUM_DENSE = 2
