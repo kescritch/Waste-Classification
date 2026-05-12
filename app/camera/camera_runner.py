@@ -34,7 +34,6 @@ def run_camera_with_model(model):
             label = f"{prediction} ({confidence:.2%})"
         cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-        print(dict(zip(CLASS_NAMES, yhat[0])))
         cv2.imshow('Waste Classification', image)
         
         if cv2.waitKey(1) & 0xFF == ord('q'):
