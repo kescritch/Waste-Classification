@@ -19,8 +19,8 @@ Custom CNN model
 # Instructions: 
 - Create virtual environment.
 - Download requirements using pip install -r requirements.txt.
-- Uncomment the respective lines in run.py
-- Run program using run.py
+- Uncomment the respective lines in run.py. When training a new model, you can adjust numer of epochs in config.py.
+- Run program using run.py.
 
 # Structure: 
 - Model
