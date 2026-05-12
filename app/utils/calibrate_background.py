@@ -3,6 +3,9 @@ import os
 from app.config import ROOT_DIR
 
 def run_calibration():
+    """
+    Captures 200 images of the background (no waste) for calibration.
+    """
     camera = cv2.VideoCapture(0)
     count = 0
     save_dir = os.path.join(ROOT_DIR, "none")

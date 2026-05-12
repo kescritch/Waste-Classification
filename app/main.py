@@ -3,7 +3,7 @@ import tensorflow as tf
 import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
-from app.utils import load, ploter
+from app.utils import load_images, ploter
 from app.models import cnn_v1 , cnn_v2
 from app.config import *
 
@@ -17,8 +17,8 @@ def build_model(model_ver:str):
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu,True) #limiting GPU memory growth
         
-    load.validate_files(ROOT_DIR)
-    val, train, test = load.process_data(ROOT_DIR, BATCH_SIZE)
+    load_images.validate_files(ROOT_DIR)
+    val, train, test = load_images.process_data(ROOT_DIR, BATCH_SIZE)
 
     '''Custom CNN model'''
     if model_ver == "v1":
@@ -44,13 +44,14 @@ def build_model(model_ver:str):
         os.makedirs(MODELS_DIR)
         
     built_model.save(os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.keras"))
-    ploter.plot(hist,label)   
+    ploter.plot(hist,label)
+    
+    return built_model   
 
-def test_model(model_ver:str):
+def test_model(model):
     '''
     Main function to test the CNN model on individual images in the 'test_images' directory.
     '''
-    model = load_model(os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.keras"))
     
         # Test on individual images
     print("\n=== Individual Image Predictions ===")
@@ -81,3 +82,7 @@ def test_model(model_ver:str):
     else:
         print("'test_images' directory not found")
         
+def load(path):   
+    return load_model(path)
+
+    

@@ -4,8 +4,7 @@ import os
 from tensorflow.keras.models import load_model
 from app.config import MODELS_DIR, CLASS_NAMES
 
-def run_camera_with_model(model_ver: str):
-    model = load_model(os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.keras"))
+def run_camera_with_model(model):
     camera = cv2.VideoCapture(0)
     
     while True:
