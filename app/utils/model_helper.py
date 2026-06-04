@@ -31,7 +31,7 @@ def train_model(model, train_loader, val_loader, num_epochs, device):
 
 
 
-def evaluate_model(model, test_loader):
+def evaluate_model(model, test_loader, device):
     
     acc = Accuracy(task="multiclass", num_classes=len(CLASS_NAMES))
     precision = Precision(task="multiclass", num_classes=len(CLASS_NAMES), average="macro")
@@ -41,6 +41,10 @@ def evaluate_model(model, test_loader):
     
     with torch.no_grad():
         for image, target in test_loader:
+            
+            image = image.to(device)
+            target = target.to(device)
+            
             outputs = model(image)
             
             _, predicted = torch.max(outputs.data, 1)

@@ -30,10 +30,10 @@ def main(model_ver:str):
     
     print("Training model...")
     model_helper.train_model(model, train_loader, val_loader, NUM_EPOCHS, device)
+   
+    print("Evaluating model...")
+    model_helper.evaluate_model(model, test_loader, device)
     
-    print("Testing Model...")
-    model_helper.evaluate_model(model,test_loader)
-
 def test_model(model):
     '''
     Main function to test the CNN model on individual images in the 'test_images' directory.
