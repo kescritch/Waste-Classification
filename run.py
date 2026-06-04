@@ -1,4 +1,3 @@
-from app.config import MODELS_DIR
 import app.main as model
 import app.camera.camera_runner as camera
 import app.utils.calibrate_background as calibrate

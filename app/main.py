@@ -7,6 +7,7 @@ import numpy as np
 
 from app.utils import image_processor, model_helper
 from app.models.cnn_v1 import CNN_V1
+from app.models.cnn_v2 import CNN_V2
 from app.config import *
 
 def main(model_ver:str):
@@ -19,7 +20,10 @@ def main(model_ver:str):
     print(f"Using device: {device}")
     
     print("Building model...")
-    model = CNN_V1(num_classes=len(CLASS_NAMES)).to(device)
+    if model_ver == "v1":
+        model = CNN_V1(num_classes=len(CLASS_NAMES)).to(device)
+    elif model_ver == "v2":
+        model = CNN_V2(num_classes=len(CLASS_NAMES)).to(device)
     print(model)
     
     val_loader, train_loader, test_loader = image_processor.process_data(ROOT_DIR, batch_size=BATCH_SIZE)

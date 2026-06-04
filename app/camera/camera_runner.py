@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 import os
-from tensorflow.keras.models import load_model
 from app.config import MODELS_DIR, CLASS_NAMES
 
 def run_camera_with_model(model):
