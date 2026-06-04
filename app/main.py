@@ -34,40 +34,12 @@ def main(model_ver:str):
     print("Evaluating model...")
     model_helper.evaluate_model(model, test_loader, device)
     
-def test_model(model):
-    '''
-    Main function to test the CNN model on individual images in the 'test_images' directory.
-    '''
+    test_model(model)
     
-        # Test on individual images
-    print("\n=== Individual Image Predictions ===")
-    if os.path.exists(TEST_DIR):
-        for filename in os.listdir(TEST_DIR):
-            img_path = os.path.join(TEST_DIR, filename)
-            if not os.path.isfile(img_path):
-                continue
-            
-            img = cv2.imread(img_path)
-            if img is None:
-                print(f"Failed to load {filename}")
-                continue
-            
-            # Resize and normalize
-            resized = cv2.resize(img, (256, 256))
-            normalized = resized / 255.0
-            
-            # Predict
-            yhat = model.predict(np.expand_dims(normalized, axis=0), verbose=0)  # Shape: (1, 4)
-            
-            # Get the class with highest probability
-            predicted_class = np.argmax(yhat[0])  # Get index of max probability
-            confidence = np.max(yhat[0])  # Get the probability value
-            prediction = CLASS_NAMES[predicted_class]
-            
-            print(f"Prediction for {filename}: {prediction} (confidence: {confidence:.2%})")
-    else:
-        print("'test_images' directory not found")
-        
+    print("Saving model...")
+    model_path = os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.pth")
+    torch.save(model.state_dict(), model_path)
+
 def load(path):   
     return load_model(path)
-
+3ff9c3bfb0067d95567f5d55b76775
