@@ -32,7 +32,7 @@ Custom CNN model
   - main.py - entry point, builds tests and records data.
   
 # Stack:
-- Python, TensorFlow, Keras, OpenCV, Matplotlib
+- Python, Pytorch, OpenCV, Matplotlib
 
 ## Datasets
 - https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2?select=standardized_256
