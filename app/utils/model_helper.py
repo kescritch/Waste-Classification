@@ -56,3 +56,26 @@ def evaluate_model(model, test_loader, device):
     print(f"Test Accuracy: {acc.compute().item():.4f}"
           f"\nTest Precision: {precision.compute().item():.4f}"
           f"\nTest Recall: {recall.compute().item():.4f}")
+    
+def image_test(model, image_path, device):
+    from PIL import Image
+    from torchvision import transforms
+    
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+    
+    image = Image.open(image_path).convert('RGB')
+    image = transform(image).unsqueeze(0).to(device)
+    
+    model.eval()
+    with torch.no_grad():
+        output = model(image)
+        _, predicted = torch.max(output.data, 1)
+    
+    print(f"Predicted class: {CLASS_NAMES[predicted.item()]}")
+    
+def load_model(path):
+    return
