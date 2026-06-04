@@ -27,11 +27,13 @@ def balance_data(dataset): #replace this with a random oversampler that samples 
     
     # Count how many images per class
     class_counts = [0] * len(dataset.classes)
+    
     for _, label in dataset.samples:
         class_counts[label] += 1
     
     # Give higher weight to underrepresented classes
-    class_weights = [1.0 / count for count in class_counts]
+    class_weights = [1.0 / max(count, 1) for count in class_counts]
+    class_weights = torch.tensor(class_weights)
     
     # Assign a weight to every single image
     sample_weights = [class_weights[label] for _, label in dataset.samples]
@@ -48,6 +50,7 @@ def process_data(directory : str, train_percent : int=70, validation_percent : i
     """
     Processes image data from a directory and splits it into training, validation and test sets.
     """
+    
     print("Validating files in directory...")
     validate_files(directory) 
     
