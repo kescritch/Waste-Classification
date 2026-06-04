@@ -28,11 +28,12 @@ Custom CNN model
   - models - contains both the custom and transfer learning model builders.
   - output - stores the logs and built models.
   - utils - stores the helper functions.
-  - config.py - contains the constants.
-  - main.py - entry point, builds tests and records data.
+  - config.py - contains constants.
+  - main.py - models main file.
+  - run.py - main entry point
   
 # Stack:
-- Python, TensorFlow, Keras, OpenCV, Matplotlib
+- Python, Pytorch, OpenCV, Matplotlib
 
 ## Datasets
 - https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2?select=standardized_256
