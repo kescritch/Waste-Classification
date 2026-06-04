@@ -6,9 +6,9 @@ import os
 
 model_ver = "v2" # Choose 'v1' for custom CNN or 'v2' for transfer learning with MobileNetV2
 
-# train new model
+model.main(model_ver) #builds the model
 
-calibrate.run_calibration()
+# calibrate.run_calibration()
 # built_model = model.build_model(model_ver)
 
 #use already existing model

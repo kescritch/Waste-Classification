@@ -1,6 +1,5 @@
 from datetime import datetime
 import os
-import tensorflow as tf
 import matplotlib.pyplot as plt
 
 from app.config import PLOTS_DIR

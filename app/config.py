@@ -12,7 +12,8 @@ MODELS_DIR = os.path.join(OUTPUT_DIR, 'models')
 
 #Training Params
 BATCH_SIZE = 32
-NUM_EPOCH = 40
+NUM_EPOCHS = 40
+LEARNING_RATE = 0.001
 
 # Model Params
 CLASS_NAMES = ["none", "not_allowed", "paper", "plastic", "trash"]
