@@ -33,9 +33,9 @@ def train_model(model, train_loader, val_loader, num_epochs, device):
 
 def evaluate_model(model, test_loader, device):
     
-    acc = Accuracy(task="multiclass", num_classes=len(CLASS_NAMES))
-    precision = Precision(task="multiclass", num_classes=len(CLASS_NAMES), average="macro")
-    recall = Recall(task="multiclass", num_classes=len(CLASS_NAMES), average="macro")
+    acc = Accuracy(task="multiclass", num_classes=len(CLASS_NAMES)).to(device)
+    precision = Precision(task="multiclass", num_classes=len(CLASS_NAMES), average="macro").to(device)
+    recall = Recall(task="multiclass", num_classes=len(CLASS_NAMES), average="macro").to(device)
     
     model.eval()
     
@@ -48,7 +48,11 @@ def evaluate_model(model, test_loader, device):
             outputs = model(image)
             
             _, predicted = torch.max(outputs.data, 1)
+            
             acc(predicted, target)
             precision(predicted, target)
             recall(predicted, target)
-                        
+
+    print(f"Test Accuracy: {acc.compute().item():.4f}"
+          f"\nTest Precision: {precision.compute().item():.4f}"
+          f"\nTest Recall: {recall.compute().item():.4f}")
