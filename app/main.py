@@ -30,6 +30,9 @@ def main(model_ver:str):
     
     print("Training model...")
     model_helper.train_model(model, train_loader, val_loader, NUM_EPOCHS, device)
+    
+    print("Evaluating model...")
+    model_helper.evaluate_model(model, test_loader, device)
 
 def test_model(model):
     '''
