@@ -67,15 +67,19 @@ def image_test(model, image_path, device):
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
     
-    image = Image.open(image_path).convert('RGB')
-    image = transform(image).unsqueeze(0).to(device)
-    
-    model.eval()
-    with torch.no_grad():
-        output = model(image)
-        _, predicted = torch.max(output.data, 1)
-    
-    print(f"Predicted class: {CLASS_NAMES[predicted.item()]}")
+    for filename in os.listdir(file_path):
+    	img_path = os.join(file_path, filename)
+    	
+	image = Image.open(image_path).convert('RGB')
+	image = transform(image).unsqueeze(0).to(device)
+	    
+	model.eval()
+	
+	with torch.no_grad():
+		output = model(image)
+		_, predicted = torch.max(output.data, 1)
+	    
+	print(f"Predicted class: {CLASS_NAMES[predicted.item()]}")
     
 def load_model(path):
     return

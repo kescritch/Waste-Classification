@@ -34,7 +34,7 @@ def main(model_ver:str):
     print("Evaluating model...")
     model_helper.evaluate_model(model, test_loader, device)
     
-    test_model(model)
+    model_helper.image_test(model,TEST_DIR, device)
     
     print("Saving model...")
     model_path = os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.pth")
@@ -42,4 +42,3 @@ def main(model_ver:str):
 
 def load(path):   
     return load_model(path)
-3ff9c3bfb0067d95567f5d55b76775
