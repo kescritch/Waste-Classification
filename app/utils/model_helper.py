@@ -66,10 +66,13 @@ def image_test(model, image_path, device):
 
     
     dir_path = os.path.dirname(image_path) or '.'
-    for filename in os.listdir(dir_path):
-        img_path = os.path.join(dir_path, filename)  
+    for filename in os.listdir(TEST_DIR):
+        img_path = os.path.join(TEST_DIR, filename)
 
-        image = Image.open(img_path).convert('RGB')
+        if not os.path.isfile(img_path):
+            continue
+
+        image = Image.open(img_path).convert("RGB")
         image = transform(image).unsqueeze(0).to(device)
 
         model.eval()
