@@ -37,8 +37,7 @@ def main(model_ver:str):
     model_helper.image_test(model,TEST_DIR, device)
     
     print("Saving model...")
+    os.makedirs(MODELS_DIR, exist_ok=True)
     model_path = os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.pth")
     torch.save(model.state_dict(), model_path)
 
-def load(path):   
-    return load_model(path)

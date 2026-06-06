@@ -81,8 +81,8 @@ def image_test(model, image_path, device):
             output = model(image)
             _, predicted = torch.max(output.data, 1)
 
-        print(f"Predicted class: {CLASS_NAMES[predicted.item()]}")
+        print(f"File: {filename} - Predicted class: {CLASS_NAMES[predicted.item()]}")
 
 
 def load_model(path):
-    return None  
+    return torch.load(path)  
