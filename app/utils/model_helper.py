@@ -26,21 +26,22 @@ def train_model(model, train_loader, val_loader, num_epochs, device):
         print(f"Train Loss: {running_loss / len(train_loader):.4f}")
 
         # Validation
-        model.eval()
-        val_loss = 0.0
-        correct  = 0
-        total    = 0
-        with torch.no_grad():
-            for data, targets in val_loader:
-                data    = data.to(device)
-                targets = targets.to(device)
-                outputs = model(data)
-                loss    = criterion(outputs, targets)
-                val_loss += loss.item()
-                _, predicted = torch.max(outputs, 1)
-                correct += (predicted == targets).sum().item()
-                total   += targets.size(0)
-        print(f"Val Loss: {val_loss / len(val_loader):.4f} | Val Accuracy: {correct / total:.4f}")
+        if epoch % 5 == 0 or epoch == num_epochs - 1:  # Validate every 5 epochs and on the last epoch
+            model.eval()
+            val_loss = 0.0
+            correct  = 0
+            total    = 0
+            with torch.no_grad():
+                for data, targets in val_loader:
+                    data    = data.to(device)
+                    targets = targets.to(device)
+                    outputs = model(data)
+                    loss    = criterion(outputs, targets)
+                    val_loss += loss.item()
+                    _, predicted = torch.max(outputs, 1)
+                    correct += (predicted == targets).sum().item()
+                    total   += targets.size(0)
+            print(f"Val Loss: {val_loss / len(val_loader):.4f} | Val Accuracy: {correct / total:.4f}")
 
 
 def evaluate_model(model, test_loader, device):
