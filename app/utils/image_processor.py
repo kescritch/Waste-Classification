@@ -65,9 +65,9 @@ def process_data(directory: str, train_percent: int = 70, validation_percent: in
     print("Balancing data...")
     sampler = balance_data(train_data, dataset)
 
-    train_loader = DataLoader(train_data, batch_size=batch_size, sampler=sampler)
-    val_loader   = DataLoader(val_data,   batch_size=batch_size, shuffle=False)
-    test_loader  = DataLoader(test_data,  batch_size=batch_size, shuffle=False)
+    train_loader = DataLoader(train_data, batch_size=batch_size, sampler=sampler, num_workers = 4)
+    val_loader   = DataLoader(val_data,   batch_size=batch_size, shuffle=False, num_workers = 4)
+    test_loader  = DataLoader(test_data,  batch_size=batch_size, shuffle=False, num_workers = 4)
 
     return train_loader, val_loader, test_loader
           
