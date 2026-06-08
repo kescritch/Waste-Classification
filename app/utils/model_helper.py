@@ -5,29 +5,42 @@ from app.config import *
 
 from torchmetrics.classification import Accuracy, Precision, Recall
 
-
 def train_model(model, train_loader, val_loader, num_epochs, device):
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
     model.to(device)
 
     for epoch in range(num_epochs):
+        # Training
         model.train()
         running_loss = 0.0
-
         for batch_index, (data, targets) in enumerate(tqdm(train_loader, desc=f"Epoch [{epoch+1}/{num_epochs}]")):
-            data = data.to(device)
+            data    = data.to(device)
             targets = targets.to(device)
-
             optimizer.zero_grad()
-            scores = model(data)
-            loss = criterion(scores, targets)
+            scores  = model(data)
+            loss    = criterion(scores, targets)
             loss.backward()
             optimizer.step()
-
             running_loss += loss.item()
+        print(f"Train Loss: {running_loss / len(train_loader):.4f}")
 
-        print(f"Loss: {running_loss / len(train_loader):.4f}")
+        # Validation
+        model.eval()
+        val_loss = 0.0
+        correct  = 0
+        total    = 0
+        with torch.no_grad():
+            for data, targets in val_loader:
+                data    = data.to(device)
+                targets = targets.to(device)
+                outputs = model(data)
+                loss    = criterion(outputs, targets)
+                val_loss += loss.item()
+                _, predicted = torch.max(outputs, 1)
+                correct += (predicted == targets).sum().item()
+                total   += targets.size(0)
+        print(f"Val Loss: {val_loss / len(val_loader):.4f} | Val Accuracy: {correct / total:.4f}")
 
 
 def evaluate_model(model, test_loader, device):
@@ -64,8 +77,6 @@ def image_test(model, image_path, device):
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
 
-    
-    dir_path = os.path.dirname(image_path) or '.'
     for filename in os.listdir(TEST_DIR):
         img_path = os.path.join(TEST_DIR, filename)
 
@@ -84,5 +95,7 @@ def image_test(model, image_path, device):
         print(f"File: {filename} - Predicted class: {CLASS_NAMES[predicted.item()]}")
 
 
-def load_model(path):
-    return torch.load(path)  
+def load_model(path, model):
+    model.load_state_dict(torch.load(path))
+    model.eval()
+    return model

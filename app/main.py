@@ -1,9 +1,6 @@
 import torch
-from torch import device
 
 import os
-import cv2
-import numpy as np
 
 from app.utils import image_processor, model_helper
 from app.models.cnn_v1 import CNN_V1
@@ -26,7 +23,7 @@ def main(model_ver:str):
         model = CNN_V2(num_classes=len(CLASS_NAMES)).to(device)
     print(model)
     
-    val_loader, train_loader, test_loader = image_processor.process_data(ROOT_DIR, batch_size=BATCH_SIZE)
+    train_loader, val_loader, test_loader = image_processor.process_data(ROOT_DIR, batch_size=BATCH_SIZE)
     
     print("Training model...")
     model_helper.train_model(model, train_loader, val_loader, NUM_EPOCHS, device)

@@ -22,63 +22,53 @@ def validate_files(directory : str):
                 print('Issue with image ' + img_path)
                 os.remove(img_path)
 
-def balance_data(dataset): #replace this with a random oversampler that samples with replacement from the underrepresented classes until all classes have the same number of samples.
-    """Returns a sampler that evenly samples from each class."""
+def balance_data(dataset_subset, full_dataset):
+    """Returns a WeightedRandomSampler balanced across classes for a training subset."""
     
-    # Count how many images per class
-    class_counts = [0] * len(dataset.classes)
+    # Get labels only for the subset indices
+    labels = [full_dataset.targets[i] for i in dataset_subset.indices]
     
-    for _, label in dataset.samples:
-        class_counts[label] += 1
+    # Count per class and assign inverse weights
+    class_counts  = torch.bincount(torch.tensor(labels))
+    class_weights = 1.0 / class_counts.float()
+    sample_weights = [class_weights[label].item() for label in labels]
     
-    # Give higher weight to underrepresented classes
-    class_weights = [1.0 / max(count, 1) for count in class_counts]
-    class_weights = torch.tensor(class_weights)
-    
-    # Assign a weight to every single image
-    sample_weights = [class_weights[label] for _, label in dataset.samples]
-    
-    sampler = WeightedRandomSampler(
+    return WeightedRandomSampler(
         weights=sample_weights,
         num_samples=len(sample_weights),
         replacement=True
     )
-    
-    return sampler
            
-def process_data(directory : str, train_percent : int=70, validation_percent : int=20, batch_size:int = 32) -> tuple[torch.utils.data.Dataset, torch.utils.data.Dataset, torch.utils.data.Dataset]: 
-    """
-    Processes image data from a directory and splits it into training, validation and test sets.
-    """
+def process_data(directory: str, train_percent: int = 70, validation_percent: int = 20, batch_size: int = 32) -> tuple[DataLoader, DataLoader, DataLoader]:
     
     print("Validating files in directory...")
-    validate_files(directory) 
-    
-    transform = transforms.Compose([
-                                    transforms.Resize((224, 224)),
-                                    transforms.ToTensor(),
-                                    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-                                    ])
-    
-    dataset = datasets.ImageFolder(directory, transform=transform)
-    
-    print("Balancing data...")
-    balanced_data = balance_data(dataset)
+    validate_files(directory)
 
-    # Splitting the data
-    total_samples = len(balanced_data)
-    
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                             std=[0.229, 0.224, 0.225])
+    ])
+
+    dataset = datasets.ImageFolder(directory, transform=transform)
+
+    # Split FIRST using dataset length
+    total_samples = len(dataset)
     train_size = int(total_samples * train_percent * 0.01)
-    val_size = int(total_samples * validation_percent * 0.01)
-    test_size = total_samples - train_size - val_size
+    val_size   = int(total_samples * validation_percent * 0.01)
+    test_size  = total_samples - train_size - val_size
 
     train_data, val_data, test_data = random_split(dataset, [train_size, val_size, test_size])
-    
-    # Use sampler instead of shuffle=True on train only
-    train_loader = DataLoader(train_data, batch_size=batch_size, sampler=balanced_data)
+
+    # Balance AFTER split, on train subset only
+    print("Balancing data...")
+    sampler = balance_data(train_data, dataset)
+
+    train_loader = DataLoader(train_data, batch_size=batch_size, sampler=sampler)
     val_loader   = DataLoader(val_data,   batch_size=batch_size, shuffle=False)
     test_loader  = DataLoader(test_data,  batch_size=batch_size, shuffle=False)
-    
+
     return train_loader, val_loader, test_loader
           
 def get_and_print_distribution(directory: str) -> dict:
