@@ -41,29 +41,24 @@ def train_model(model, train_loader, val_loader, num_epochs, device):
         print(f"Train Loss: {train_loss:.4f} | Train Accuracy: {train_acc:.4f}")
 
         # --- Validation (every 5 epochs and on the last epoch) ---
-        if epoch == num_epochs - 1:
-            model.eval()
-            val_loss     = 0.0
-            val_correct  = 0
-            val_total    = 0
-            with torch.no_grad():
-                for data, targets in val_loader:
-                    data    = data.to(device)
-                    targets = targets.to(device)
-                    outputs = model(data)
-                    loss    = criterion(outputs, targets)
-                    val_loss    += loss.item()
-                    _, predicted = torch.max(outputs, 1)
-                    val_correct += (predicted == targets).sum().item()
-                    val_total   += targets.size(0)
+        model.eval()
+        val_loss     = 0.0
+        val_correct  = 0
+        val_total    = 0
+        with torch.no_grad():
+            for data, targets in val_loader:
+                data    = data.to(device)
+                targets = targets.to(device)
+                outputs = model(data)
+                loss    = criterion(outputs, targets)
+                val_loss    += loss.item()
+                _, predicted = torch.max(outputs, 1)
+                val_correct += (predicted == targets).sum().item()
+                val_total   += targets.size(0)
 
-            epoch_val_loss = val_loss / len(val_loader)
-            epoch_val_acc  = val_correct / val_total
-            print(f"Val Loss: {epoch_val_loss:.4f} | Val Accuracy: {epoch_val_acc:.4f}")
-        else:
-            # Carry forward last known val metrics so hist lists stay the same length as loss/accuracy
-            epoch_val_loss = hist['val_loss'][-1]  if hist['val_loss']  else 0.0
-            epoch_val_acc  = hist['val_accuracy'][-1] if hist['val_accuracy'] else 0.0
+        epoch_val_loss = val_loss / len(val_loader)
+        epoch_val_acc  = val_correct / val_total
+        print(f"Val Loss: {epoch_val_loss:.4f} | Val Accuracy: {epoch_val_acc:.4f}")
 
         hist['val_loss'].append(epoch_val_loss)
         hist['val_accuracy'].append(epoch_val_acc)
