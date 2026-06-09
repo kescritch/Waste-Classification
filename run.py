@@ -6,9 +6,8 @@ import os
 
 model_ver = "v2" # Choose 'v1' for custom CNN or 'v2' for transfer learning with MobileNetV2
 
-model.main(model_ver) #builds the model
-
+model.build_model(model_ver) #builds the model
 
 #---------------------------------------------------------------------------------------------#
 
-# model.classify_test_images(model_ver) #classifies the test images in the test_images folder
+# model.classify_test_images(model_ver) #classifies the test images in the test_images folderpip install matplotlib
