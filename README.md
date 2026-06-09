@@ -8,13 +8,12 @@ Implements a CNN using transfer learning with MobileNetV2.
 # Results
 
 ### Custom CNN (v1)
-| Class       | Precision | Recall | F1-Score | Support |
-|-------------|-----------|--------|----------|---------|
-| not_allowed | 0.90      | 0.76   | 0.82     | 625     |
-| paper       | 0.77      | 0.80   | 0.78     | 1500    |
-| plastic     | 0.79      | 0.59   | 0.68     | 1241    |
-| trash       | 0.80      | 0.88   | 0.84     | 3024    |
-| **Overall** | **0.81**  |        |          | **6390**|
+| Metric       | Value  |
+|--------------|--------|
+| Max Accuracy | 0.88   |
+| Max Val Acc  | 0.83   |
+| Min Loss     | 0.32   |
+| Min Val Loss | 0.49   |
 
 ![v1 Loss and Accuracy](app/output/plots/loss_plot_and_accuracy_plot_2026-06-09_12-27-30.png)
 
@@ -23,12 +22,12 @@ Implements a CNN using transfer learning with MobileNetV2.
 ### Transfer Learning MobileNetV2 (v2)
 | Metric       | Value  |
 |--------------|--------|
-| Max Accuracy | 0.9264 |
-| Max Val Acc  | 0.9330 |
-| Min Loss     | 0.1988 |
-| Min Val Loss | 0.1997 |
+| Max Accuracy | 0.93   |
+| Max Val Acc  | 0.93   |
+| Min Loss     | 0.20   |
+| Min Val Loss | 0.20   |
 
-![v2 Loss and Accuracy](app/output/plots/loss_plot_and_accuracy_plot_2026-06-09_11-04-29.png)
+![v2 Loss and Accuracy](app\output\plots\loss_plot_and_accuracy_plot_2026-06-09_11-25-30.png)
 
 ---
 
