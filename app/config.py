@@ -16,7 +16,7 @@ NUM_EPOCHS = 40
 LEARNING_RATE = 0.001
 
 # Model Params
-CLASS_NAMES = ["none", "not_allowed", "paper", "plastic", "trash"]
+CLASS_NAMES = ["not_allowed", "paper", "plastic", "trash"]
 CONV_BLOCKS = 4
 CONV_LAYERS = 1
 NUM_DENSE = 2

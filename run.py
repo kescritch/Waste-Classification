@@ -8,13 +8,7 @@ model_ver = "v2" # Choose 'v1' for custom CNN or 'v2' for transfer learning with
 
 model.main(model_ver) #builds the model
 
-# calibrate.run_calibration()
-# built_model = model.build_model(model_ver)
 
-#use already existing model
+#---------------------------------------------------------------------------------------------#
 
-# model_path = os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.keras")
-# built_model = model.load(model_path)
-
-# model.test_model(built_model)
-# camera.run_camera_with_model(built_model)
+# model.classify_test_images(model_ver) #classifies the test images in the test_images folder

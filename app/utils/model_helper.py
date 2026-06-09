@@ -5,15 +5,22 @@ from app.config import *
 
 from torchmetrics.classification import Accuracy, Precision, Recall
 
+from app.models.cnn_v1 import CNN_V1
+from app.models.cnn_v2 import CNN_V2
+
 def train_model(model, train_loader, val_loader, num_epochs, device):
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
     model.to(device)
 
+    hist = {'loss': [], 'val_loss': [], 'accuracy': [], 'val_accuracy': []}
+
     for epoch in range(num_epochs):
-        # Training
+        # --- Training ---
         model.train()
-        running_loss = 0.0
+        running_loss  = 0.0
+        correct       = 0
+        total         = 0
         for batch_index, (data, targets) in enumerate(tqdm(train_loader, desc=f"Epoch [{epoch+1}/{num_epochs}]")):
             data    = data.to(device)
             targets = targets.to(device)
@@ -23,25 +30,45 @@ def train_model(model, train_loader, val_loader, num_epochs, device):
             loss.backward()
             optimizer.step()
             running_loss += loss.item()
-        print(f"Train Loss: {running_loss / len(train_loader):.4f}")
+            _, predicted  = torch.max(scores, 1)
+            correct      += (predicted == targets).sum().item()
+            total        += targets.size(0)
 
-        # Validation
-        if epoch % 5 == 0 or epoch == num_epochs - 1:  # Validate every 5 epochs and on the last epoch
+        train_loss = running_loss / len(train_loader)
+        train_acc  = correct / total
+        hist['loss'].append(train_loss)
+        hist['accuracy'].append(train_acc)
+        print(f"Train Loss: {train_loss:.4f} | Train Accuracy: {train_acc:.4f}")
+
+        # --- Validation (every 5 epochs and on the last epoch) ---
+        if epoch == num_epochs - 1:
             model.eval()
-            val_loss = 0.0
-            correct  = 0
-            total    = 0
+            val_loss     = 0.0
+            val_correct  = 0
+            val_total    = 0
             with torch.no_grad():
                 for data, targets in val_loader:
                     data    = data.to(device)
                     targets = targets.to(device)
                     outputs = model(data)
                     loss    = criterion(outputs, targets)
-                    val_loss += loss.item()
+                    val_loss    += loss.item()
                     _, predicted = torch.max(outputs, 1)
-                    correct += (predicted == targets).sum().item()
-                    total   += targets.size(0)
-            print(f"Val Loss: {val_loss / len(val_loader):.4f} | Val Accuracy: {correct / total:.4f}")
+                    val_correct += (predicted == targets).sum().item()
+                    val_total   += targets.size(0)
+
+            epoch_val_loss = val_loss / len(val_loader)
+            epoch_val_acc  = val_correct / val_total
+            print(f"Val Loss: {epoch_val_loss:.4f} | Val Accuracy: {epoch_val_acc:.4f}")
+        else:
+            # Carry forward last known val metrics so hist lists stay the same length as loss/accuracy
+            epoch_val_loss = hist['val_loss'][-1]  if hist['val_loss']  else 0.0
+            epoch_val_acc  = hist['val_accuracy'][-1] if hist['val_accuracy'] else 0.0
+
+        hist['val_loss'].append(epoch_val_loss)
+        hist['val_accuracy'].append(epoch_val_acc)
+
+    return hist
 
 
 def evaluate_model(model, test_loader, device):
@@ -96,7 +123,18 @@ def image_test(model, image_path, device):
         print(f"File: {filename} - Predicted class: {CLASS_NAMES[predicted.item()]}")
 
 
-def load_model(path, model):
-    model.load_state_dict(torch.load(path))
+def load_model(model_ver: str):
+    """Loads a saved model from disk."""
+    device = "cpu"
+    print(f"Using device: {device}")
+    
+    if model_ver == "v1":
+        model = CNN_V1(num_classes=len(CLASS_NAMES)).to(device)
+    elif model_ver == "v2":
+        model = CNN_V2(num_classes=len(CLASS_NAMES)).to(device)
+    
+    model_path = os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.pth")
+    model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
+    
     return model
