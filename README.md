@@ -27,7 +27,7 @@ Implements a CNN using transfer learning with MobileNetV2.
 | Min Loss     | 0.20   |
 | Min Val Loss | 0.20   |
 
-![v2 Loss and Accuracy](app\output\plots\loss_plot_and_accuracy_plot_2026-06-09_11-25-30.png)
+![v2 Loss and Accuracy](app/output/plots/loss_plot_and_accuracy_plot_2026-06-09_11-25-30.png)
 
 ---
 
