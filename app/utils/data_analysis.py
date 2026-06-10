@@ -4,14 +4,8 @@ import matplotlib.pyplot as plt
 from app.config import PLOTS_DIR
 
 
-def plot(hist: dict, label: str):
-    """
-    Args:
-        hist: dict with keys 'loss', 'val_loss', 'accuracy', 'val_accuracy',
-              each mapping to a list of per-epoch values.
-              e.g. {'loss': [...], 'val_loss': [...], 'accuracy': [...], 'val_accuracy': [...]}
-        label: descriptive text printed below the plots
-    """
+def plot(hist: dict, label: str) -> None:
+    """Plots the training and validation loss and accuracy from the training history."""
     fig, axs = plt.subplots(1, 2, figsize=(10, 4))
 
     # Loss plot

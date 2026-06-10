@@ -1,17 +1,14 @@
-from PIL import Image as PILImage
 import torch
 from torch import device
 
 import os
-
-from torchvision import transforms
 
 from app.utils import image_processor, model_helper, data_analysis, camera_runner
 from app.models.cnn_v1 import CNN_V1
 from app.models.cnn_v2 import CNN_V2
 from app.config import *
 
-def build_model(model_ver:str, device = "cpu"):
+def build_model(model_ver:str, device = "cpu") -> None:
     """Main function to build, train, and evaluate the CNN model for waste classification.
 
         Use v1 to test my custom CNN model
@@ -40,8 +37,13 @@ def build_model(model_ver:str, device = "cpu"):
     model_path = os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.pth")
     torch.save(model.state_dict(), model_path)
 
-def run_model(model_ver:str, device = "cpu"):
-    """Loads a saved model and runs it on the webcam feed."""
+def run_model(model_ver:str, device = "cpu") -> None:
+    """
+    Loads a saved model based on the version and runs it on the webcam feed.
+    
+    Use v1 to test my custom CNN model.
+    Use v2 to test the transfer learning model using MobileNetV2 as a base.
+    """
     print(f"Using device: {device}")
     
     model = model_helper.load_model(model_ver)

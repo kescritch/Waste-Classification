@@ -1,11 +1,8 @@
 import cv2
-import numpy as np
-import torch
-from torchvision import transforms
 from app.config import CLASS_NAMES
 from app.models.yolo import WasteDetector
 
-def video(model, device):
+def video(model, device) -> None:
     detector = WasteDetector(model, CLASS_NAMES, device)
     camera = cv2.VideoCapture(0)
     

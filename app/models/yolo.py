@@ -21,7 +21,7 @@ class WasteDetector:
 
     def process_frame(self, frame):
         # frame: BGR numpy array from OpenCV
-        results = self.yolo(frame, verbose=False, device = "cpu")[0]
+        results = self.yolo(frame, verbose=False, device=self.device)[0]
         detections = []
 
         for box in results.boxes:

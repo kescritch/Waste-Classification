@@ -1,7 +1,4 @@
 import app.main as model
-import app.utils.camera_runner as camera
-import app.utils.calibrate_background as calibrate
-import app.utils.image_processor as image_processor
 
 """
     To run a saved model uncomment model.run_model and comment out model.build model with the appropriate model version.

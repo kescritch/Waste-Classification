@@ -1,4 +1,5 @@
 from torch import nn
+import torch
 import torch.nn.functional as F
 
 class CNN_V1(nn.Module):
@@ -32,7 +33,7 @@ class CNN_V1(nn.Module):
 
         self.dropout = nn.Dropout(p=0.5)
 
-    def forward(self, x):
+    def forward(self, x) -> torch.Tensor:
         x = self.pool(F.relu(self.bn1(self.conv1(x))))
         x = self.pool(F.relu(self.bn2(self.conv2(x))))
         x = self.pool(F.relu(self.bn3(self.conv3(x))))

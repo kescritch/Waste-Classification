@@ -1,5 +1,5 @@
 # Waste-Classification
-**This project is actively in development**
+# Purpose
 
 # Overview
 Implements a custom CNN architecture trained on 11,000 images that categorizes waste into 4 waste categories.

@@ -1,6 +1,4 @@
-import torch
 from torch import nn
-import torch.nn.functional as F
 from torchvision import models
 
 class CNN_V2(nn.Module): 
@@ -13,7 +11,7 @@ class CNN_V2(nn.Module):
             param.requires_grad = False
             
         in_features = self.base_model.classifier[1].in_features #get the number of input features for the final layer
-        self.base_model.classifier[1] = nn.Linear(in_features=1280, out_features=num_classes) #replace the final layer with a new one for our number of classes
+        self.base_model.classifier[1] = nn.Linear(in_features=in_features, out_features=num_classes) #replace the final layer with a new one for our number of classes
         
     def forward(self, x):
         x = self.base_model(x)

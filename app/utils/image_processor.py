@@ -6,7 +6,7 @@ import os
 import cv2
 import pathlib
 
-def validate_files(directory : str):
+def validate_files(directory : str) -> None:
     """
         Checks if all of the images in the file path are valid. If not it delets them.
     """
@@ -22,7 +22,7 @@ def validate_files(directory : str):
                 print('Issue with image ' + img_path)
                 os.remove(img_path)
 
-def balance_data(dataset_subset, full_dataset):
+def balance_data(dataset_subset, full_dataset) -> WeightedRandomSampler:
     """Returns a WeightedRandomSampler balanced across classes for a training subset."""
     
     # Get labels only for the subset indices
@@ -40,7 +40,7 @@ def balance_data(dataset_subset, full_dataset):
     )
            
 def process_data(directory: str, train_percent: int = 70, validation_percent: int = 20, batch_size: int = 32) -> tuple[DataLoader, DataLoader, DataLoader]:
-    
+    """Processes the image data from the specified directory, splits it into training, validation, and test sets, and returns DataLoaders for each subset."""
     print("Validating files in directory...")
     validate_files(directory)
 

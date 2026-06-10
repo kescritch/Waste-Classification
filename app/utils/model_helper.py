@@ -8,7 +8,7 @@ from torchmetrics.classification import Accuracy, Precision, Recall
 from app.models.cnn_v1 import CNN_V1
 from app.models.cnn_v2 import CNN_V2
 
-def train_model(model, train_loader, val_loader, num_epochs, device):
+def train_model(model, train_loader, val_loader, num_epochs, device) -> dict:
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
     model.to(device)
@@ -66,7 +66,7 @@ def train_model(model, train_loader, val_loader, num_epochs, device):
     return hist
 
 
-def evaluate_model(model, test_loader, device):
+def evaluate_model(model, test_loader, device) -> None:
     acc = Accuracy(task="multiclass", num_classes=len(CLASS_NAMES)).to(device)
     precision = Precision(task="multiclass", num_classes=len(CLASS_NAMES), average="macro").to(device)
     recall = Recall(task="multiclass", num_classes=len(CLASS_NAMES), average="macro").to(device)
@@ -90,7 +90,7 @@ def evaluate_model(model, test_loader, device):
           f"Test Recall: {recall.compute().item():.4f}")
 
 
-def image_test(model, image_path, device):
+def image_test(model, device) -> None:
     from PIL import Image
     from torchvision import transforms
 
@@ -118,7 +118,7 @@ def image_test(model, image_path, device):
         print(f"File: {filename} - Predicted class: {CLASS_NAMES[predicted.item()]}")
 
 
-def load_model(model_ver: str):
+def load_model(model_ver: str) -> torch.nn.Module:
     """Loads a saved model from disk."""
     device = "cpu"
     print(f"Using device: {device}")
