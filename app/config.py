@@ -1,7 +1,7 @@
 import os
 
 # Paths
-ROOT_DIR = 'app/data/training_data/images'
+ROOT_DIR = 'app/data/training_data/archive'
 TEST_DIR = 'app/data/test_images'
 
 OUTPUT_DIR = 'app/output'
@@ -16,7 +16,7 @@ NUM_EPOCHS = 40
 LEARNING_RATE = 0.001
 
 # Model Params
-CLASS_NAMES = ["not_allowed", "paper", "plastic", "trash"]
+CLASS_NAMES = ["cardboard-paper", "glass", "metal", "organic", "plastic", "textiles"]
 CONV_BLOCKS = 4
 CONV_LAYERS = 1
 NUM_DENSE = 2

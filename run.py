@@ -5,11 +5,11 @@ import app.main as model
     To save a new model uncomment model.build_model and comment out model.run_model.
 """
     
-model_ver = "v1" # Choose 'v1' for custom CNN or 'v2' for transfer learning with MobileNetV2
+model_ver = "v2" # Choose 'v1' for custom CNN or 'v2' for transfer learning with MobileNetV2
 
 #---------------------------------------------------------------------------------------------#
 
-# model.build_model(model_ver) #builds the model
+model.build_model(model_ver) #builds the model
 
 #---------------------------------------------------------------------------------------------#
 
