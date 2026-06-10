@@ -17,5 +17,7 @@ __pycache__/
 vscode/
 .vscode/
 
+# data
+app/data/training_data/
 
 app/output/models/*.keras
