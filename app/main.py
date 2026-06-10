@@ -6,19 +6,17 @@ import os
 
 from torchvision import transforms
 
-from app.utils import image_processor, model_helper, data_analysis
+from app.utils import image_processor, model_helper, data_analysis, camera_runner
 from app.models.cnn_v1 import CNN_V1
 from app.models.cnn_v2 import CNN_V2
 from app.config import *
 
-def build_model(model_ver:str):
+def build_model(model_ver:str, device = "cpu"):
     """Main function to build, train, and evaluate the CNN model for waste classification.
 
         Use v1 to test my custom CNN model
         Use v2 to test the transfer learning model using MobileNetV2 as a base
     """
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Using device: {device}")
     
     print("Building model...")
     if model_ver == "v1":
@@ -42,14 +40,12 @@ def build_model(model_ver:str):
     model_path = os.path.join(MODELS_DIR, f"waste_classification_model-{model_ver}.pth")
     torch.save(model.state_dict(), model_path)
 
-def run_model(model_ver:str):
+def run_model(model_ver:str, device = "cpu"):
     """Loads a saved model and runs it on the webcam feed."""
-    device = "cpu"
     print(f"Using device: {device}")
     
     model = model_helper.load_model(model_ver)
     model.to(device)
     
-    from app.camera import camera_runner
-    camera_runner.run_camera_with_model(model, device)
+    camera_runner.video(model, device)
 
