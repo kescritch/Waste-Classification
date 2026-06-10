@@ -9,5 +9,5 @@ if [ -d "$DATA_DIR" ] && [ "$(ls -A $DATA_DIR)" ]; then
 fi
 
 echo "Downloading dataset..."
-kaggle datasets download -d alistairking/recyclable-and-household-waste-classification -p "$DATA_DIR" --unzip
+kaggle datasets download -d kylescritchfield/sorted-waste-classification -p "$DATA_DIR" --unzip
 echo "Done."

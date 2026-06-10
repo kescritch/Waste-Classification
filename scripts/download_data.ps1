@@ -8,5 +8,5 @@ if (Test-Path $DataDir) {
 }
 
 Write-Host "Downloading dataset..."
-kaggle datasets download -d alistairking/recyclable-and-household-waste-classification -p $DataDir --unzip
+kaggle datasets download -d kylescritchfield/sorted-waste-classification -p $DataDir --unzip
 Write-Host "Done."

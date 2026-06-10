@@ -1,7 +1,7 @@
 import os
 
 # Paths
-ROOT_DIR = 'app/data/training_data'
+ROOT_DIR = 'app/data/training_data/images'
 TEST_DIR = 'app/data/test_images'
 
 OUTPUT_DIR = 'app/output'
