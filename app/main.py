@@ -30,7 +30,7 @@ def build_model(model_ver:str, device = "cpu") -> None:
     print("Evaluating model...")
     model_helper.evaluate_model(model, test_loader, device)
     data_analysis.plot(hist, f"Model version: {model_ver} | Epochs: {NUM_EPOCHS} | Batch size: {BATCH_SIZE}")
-    model_helper.image_test(model,TEST_DIR, device)
+    model_helper.image_test(model, device)
     
     print("Saving model...")
     os.makedirs(MODELS_DIR, exist_ok=True)
