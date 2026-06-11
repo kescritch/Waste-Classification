@@ -28,7 +28,7 @@ def balance_data(dataset_subset, full_dataset) -> WeightedRandomSampler:
     return WeightedRandomSampler(weights=sample_weights, num_samples=len(sample_weights), replacement=True)
 
 
-def process_data(directory: str, train_percent: int = 70, validation_percent: int = 20, batch_size: int = 32) -> tuple[DataLoader, DataLoader, DataLoader]:
+def process_data(directory: str, train_percent: int = 70, validation_percent: int = 20, batch_size: int = 64) -> tuple[DataLoader, DataLoader, DataLoader]:
     print("Validating files in directory...")
     validate_files(directory)
 
