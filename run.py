@@ -10,7 +10,7 @@ model_ver = "v2"
 
 # image_processor.get_and_print_distribution("app/data/training_data/archive")
 
-model.build_model(model_ver)
+model.build_model(model_ver, "cuda")
 
 # model.run_model(model_ver)
 
