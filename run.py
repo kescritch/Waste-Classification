@@ -12,8 +12,8 @@ model_ver = "v2" # Choose 'v1' for custom CNN or 'v2' for transfer learning with
 
 #image_processor.get_and_print_distribution("app/data/training_data/archive")
 
-model.build_model(model_ver, "cuda") #builds the model
+# model.build_model(model_ver, "cuda") #builds the model
 
 #---------------------------------------------------------------------------------------------#
 
-#model.run_model(model_ver, "cuda") #classifies the test images in the test_images folderpip install matplotlib
+model.run_model(model_ver) #classifies the test images in the test_images folderpip install matplotlib
