@@ -34,6 +34,8 @@ class WasteDetector:
             crop = frame[y1:y2, x1:x2]
             if crop.size == 0:
                 continue
+            
+            print(f"Cropshape {crop.shape}, , aspect ratio (w/h): {crop.shape[1]/crop.shape[0]:.2f}")
 
             # Convert BGR -> RGB -> PIL -> tensor
             crop_rgb = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
